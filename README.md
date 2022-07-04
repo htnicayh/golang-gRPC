@@ -1,4 +1,4 @@
 ## Golang - gRPC
 ```go
-g
+go run *.go
 ```
