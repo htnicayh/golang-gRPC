@@ -43,30 +43,38 @@ type Writer interface {
 }
 
 type ConsoleWriter struct {
-	message string
-	index   int
 }
 
 func (cw *ConsoleWriter) Write(data []byte) (int, error) {
-	var (
-		message int
-		err     error
-	)
-
-	if cw.index == 0 {
-		message = len(cw.message)
-		err = nil
-	} else {
-		message = 0
-		err = fmt.Errorf("ConsoleWriter: Write error")
-	}
-
+	message, err := fmt.Println(string(data))
 	return message, err
 }
 
+// =================================
+
+type Increment interface {
+	Increment() int
+}
+
+type count int
+
+func (ic *count) Increment() int {
+	*ic++
+	return int(*ic)
+}
+
+// =================================
+
 func main() {
-	var w Writer = &ConsoleWriter{"Hello, world", 3}
-	w.Write([]byte("Hello, World!"))
+	// var w Writer = &ConsoleWriter{}
+	// w.Write([]byte("Hello, World!"))
+
+	myInt := count(0)
+	var inc Increment = &myInt
+
+	for i := 0; i < 5; i++ {
+		fmt.Println(inc.Increment())
+	}
 
 	// mike := Student{Human{"Mike", 25, "222-222-XXX"}, "MIT", 0.00}
 	// // paul := Student{Human{"Paul", 26, "111-222-XXX"}, "Harvard", 100}
