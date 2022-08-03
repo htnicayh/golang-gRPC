@@ -38,6 +38,8 @@ import "fmt"
 // 	fmt.Printf("Hi, I am %s, I work at %s. Call me on %s\n", e.name, e.company, e.phone)
 // }
 
+// =================================
+
 type Writer interface {
 	Write([]byte) (int, error)
 }
@@ -53,13 +55,19 @@ func (cw *ConsoleWriter) Write(data []byte) (int, error) {
 // =================================
 
 type Increment interface {
-	Increment() int
+	Increment(di int) int
 }
 
 type count int
 
-func (ic *count) Increment() int {
-	*ic++
+// Method có receivers là pointer
+func (ic *count) Increment(di int) int {
+	fmt.Printf("count(di) = %T ", count(di))
+	*ic += count(di)
+
+	fmt.Println()
+
+	fmt.Printf("*ic & %T", int(*ic))
 	return int(*ic)
 }
 
@@ -73,7 +81,7 @@ func main() {
 	var inc Increment = &myInt
 
 	for i := 0; i < 5; i++ {
-		fmt.Println(inc.Increment())
+		fmt.Println(inc.Increment(3))
 	}
 
 	// mike := Student{Human{"Mike", 25, "222-222-XXX"}, "MIT", 0.00}
